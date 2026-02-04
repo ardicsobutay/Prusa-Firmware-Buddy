@@ -11,6 +11,7 @@ target_sources(
           M300.cpp
           M330.cpp
           M340.cpp
+          M3400.cpp
           M591.cpp
           M862_1.cpp
           M862_4.cpp

@@ -15,6 +15,10 @@
 #include <state/printer_state.hpp>
 #include <transfers/transfer.hpp>
 #include <gcode/gcode_reader_restore_info.hpp>
+#include <common/delayed_print_manager.hpp>
+#include "log.h"
+
+LOG_COMPONENT_REF(MarlinServer);
 
 #include <option/has_mmu2.h>
 
@@ -77,6 +81,12 @@ void print_utils_loop() {
 }
 
 void print_begin(const char *filename, marlin_server::PreviewSkipIfAble skip_preview) {
+    // Check if there's a scheduled print and cancel it
+    if (delayed_print::DelayedPrintManager::instance().has_scheduled_print()) {
+        log_info(MarlinServer, "Canceling scheduled print to start immediate print: %s", filename);
+        delayed_print::DelayedPrintManager::instance().cancel_scheduled_print();
+    }
+
     marlin_client::print_start(filename, skip_preview);
     // FIXME: This should not be here and it should be handled
     // in Marlin. Needs refactoring!

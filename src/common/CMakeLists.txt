@@ -15,6 +15,7 @@ if(BOARD IN_LIST BUDDY_BOARDS)
             crc32.cpp
             crc32_zlib.cpp
             data_exchange.cpp
+            delayed_print_manager.cpp
             error_code_mangle.cpp
             ExtInterruptHandler.cpp
             filament.cpp

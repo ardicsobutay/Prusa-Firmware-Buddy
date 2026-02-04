@@ -82,6 +82,7 @@
 #include "app_metrics.h"
 #include "media_prefetch_instance.hpp"
 #include <common/sensor_data.hpp>
+#include <common/delayed_print_manager.hpp>
 
 #include <option/has_leds.h>
 
@@ -661,6 +662,9 @@ void init(void) {
     SteelSheets::CheckIfCurrentValid();
 #endif
     settings_load();
+
+    // Initialize delayed print manager
+    delayed_print::DelayedPrintManager::instance().init();
 }
 
 void print_fan_spd() {
@@ -798,6 +802,9 @@ static void cycle() {
     // Although the timeout should never trigger within idle() (= when a gcode is run),
     // We still need to run the step() there to prevent "sampling bias" so that the timer could reset itself during movements and single-injected gcodes
     buddy::stepper_timeout().step();
+
+    // Check for delayed/scheduled print start
+    delayed_print::DelayedPrintManager::instance().update();
 
     record_fanctl_metrics();
 

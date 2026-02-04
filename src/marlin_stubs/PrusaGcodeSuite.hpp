@@ -151,6 +151,8 @@ void M1978(); //< Fan Selftest
 void M1980(); //< Door sensor calibration
 #endif
 
+void M3400(); //< Schedule delayed print start
+
 void M9140(); //< Set normal (non-stealth) mode
 void M9141(); //< Get stealth mode status
 void M9150(); //< Set stealth mode

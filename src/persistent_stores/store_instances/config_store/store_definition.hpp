@@ -79,6 +79,8 @@
     #include "leds/dimming_enabled.hpp"
 #endif
 
+#include <common/delayed_print_manager.hpp>
+
 namespace config_store_ns {
 
 struct ItemFlag {
@@ -713,6 +715,14 @@ struct CurrentStore
     VentControl get_vent_control();
     void set_vent_control(VentControl state);
 #endif
+
+    // Delayed print start feature
+    StoreItem<delayed_print::ScheduleType, delayed_print::ScheduleType::none, ItemFlag::features, journal::hash("Delayed Print Type")> delayed_print_type;
+    StoreItem<bool, false, ItemFlag::features, journal::hash("Delayed Print Enabled")> delayed_print_enabled;
+    StoreItem<time_t, 0, ItemFlag::features, journal::hash("Delayed Print Time")> delayed_print_time;
+    StoreItem<uint32_t, 0, ItemFlag::features, journal::hash("Delayed Print Preheat Minutes")> delayed_print_preheat_minutes;
+    StoreItem<bool, false, ItemFlag::features, journal::hash("Delayed Print Preheat Enabled")> delayed_print_preheat_enabled;
+    StoreItem<std::array<char, delayed_print::MAX_FILEPATH_LENGTH>, std::array<char, delayed_print::MAX_FILEPATH_LENGTH> {}, ItemFlag::features, journal::hash("Delayed Print Filepath")> delayed_print_filepath;
 
 #if HAS_MANUAL_BELT_TUNING()
     StoreItem<bool, false, ItemFlag::calibrations, journal::hash("Manual Belt Tuning Completed")> manual_belt_tuning_completed;
