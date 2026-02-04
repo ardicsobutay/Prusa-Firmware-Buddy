@@ -60,6 +60,8 @@ static constexpr EnumArray<Response, const char *, Response::_count> response_st
     R(Tool3),
     R(Tool4),
     R(Tool5),
+    R(PrintNow),
+    R(Schedule),
 };
 
 #undef R

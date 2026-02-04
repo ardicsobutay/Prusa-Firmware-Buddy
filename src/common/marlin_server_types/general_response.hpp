@@ -64,6 +64,8 @@ enum class Response : uint8_t {
     Tool3,
     Tool4,
     Tool5,
+    PrintNow,
+    Schedule,
 
     _count,
     _last = _count - 1,

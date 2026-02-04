@@ -23,6 +23,7 @@ inline constexpr PhaseResponses Responses_YesNoIgnore          = { Response::Yes
 inline constexpr PhaseResponses Responses_YesRetry             = { Response::Yes,      Response::Retry,  Response::_none,       Response::_none };
 inline constexpr PhaseResponses Responses_RetryCancel          = { Response::Retry,    Response::Cancel, Response::_none,       Response::_none };
 inline constexpr PhaseResponses Responses_Disable              = { Response::Disable,  Response::_none,  Response::_none,       Response::_none };
+inline constexpr PhaseResponses Responses_PrintSchedule        = { Response::PrintNow, Response::Schedule, Response::Cancel,   Response::_none };
 inline constexpr PhaseResponses Responses_INVALID              = { Response::_last,    Response::_last,  Response::_last,       Response::_last };
 
 // clang-format on

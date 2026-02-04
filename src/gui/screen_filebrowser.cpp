@@ -13,6 +13,9 @@
 #include <logging/log.hpp>
 #include "img_resources.hpp"
 #include <guiconfig/GuiDefaults.hpp>
+#include <window_msgbox.hpp>
+#include <dialogs/dialog_numeric_input.hpp>
+#include <common/delayed_print_manager.hpp>
 
 #include "../Marlin/src/gcode/queue.h"
 #include "../Marlin/src/gcode/lcd/M73_PE.h"
@@ -72,7 +75,44 @@ void screen_filebrowser_data_t::printTheFile() {
         log_error(GUI, "Failed to prepare file path for print");
         return;
     }
-    print_begin(path.data());
+
+    // Show dialog: Print Now or Schedule
+    Response response = MsgBoxQuestion(_("Start print now or schedule for later?"),
+                                      Responses_PrintSchedule, 0);
+
+    if (response == Response::PrintNow) {
+        // Start print immediately
+        print_begin(path.data());
+    } else if (response == Response::Schedule) {
+        // Configure numeric input for delay in minutes
+        NumericInputConfig config;
+        config.min_value = 1;         // Minimum 1 minute
+        config.max_value = 1440;      // Maximum 24 hours
+        config.max_decimal_places = 0; // No decimals for minutes
+        config.unit = Unit::minute;
+
+        // Get delay time from user
+        auto result = DialogNumericInput::exec(_("Delay in minutes"), 15.0f, config);
+
+        if (result.has_value()) {
+            uint32_t delay_minutes = static_cast<uint32_t>(result.value());
+
+            // Schedule the print
+            if (delayed_print::DelayedPrintManager::instance().schedule_delayed_print(
+                    path.data(), delay_minutes)) {
+
+                // Show confirmation
+                char msg[64];
+                snprintf(msg, sizeof(msg), "Print scheduled in %lu minutes", (unsigned long)delay_minutes);
+                MsgBoxInfo(string_view_utf8::MakeCPUFLASH((const uint8_t *)msg), Responses_Ok);
+
+                log_info(GUI, "Scheduled print: %s in %lu minutes", path.data(), (unsigned long)delay_minutes);
+            } else {
+                MsgBoxError(_("Failed to schedule print"), Responses_Ok);
+            }
+        }
+    }
+    // If Cancel was pressed, do nothing
 }
 
 void screen_filebrowser_data_t::goHome() {

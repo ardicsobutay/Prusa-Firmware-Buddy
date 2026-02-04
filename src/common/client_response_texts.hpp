@@ -116,6 +116,10 @@ inline constexpr const char *get_response_text(Response response) {
         return N_("Tool4");
     case Response::Tool5:
         return N_("Tool5");
+    case Response::PrintNow:
+        return N_("PRINT NOW");
+    case Response::Schedule:
+        return N_("SCHEDULE");
 
     case Response::_count:
         break;
