@@ -25,9 +25,38 @@ The delayed print start feature allows users to schedule print jobs to begin at 
 
 ## Usage
 
+### Touchscreen UI (Recommended)
+
+The easiest way to schedule a delayed print is through the touchscreen interface:
+
+1. **Navigate to file browser**: Go to the Projects menu
+2. **Select a G-code file**: Touch the file you want to print
+3. **Choose scheduling option**: A dialog will appear asking:
+   - **"PRINT NOW"** - Start printing immediately (traditional behavior)
+   - **"SCHEDULE"** - Schedule the print for later
+   - **"CANCEL"** - Return to file browser
+4. **Enter delay time**: If you chose "SCHEDULE":
+   - A numeric keypad will appear
+   - Enter the delay in minutes (1-1440 minutes, i.e., up to 24 hours)
+   - Default value is 15 minutes
+   - Press OK to confirm or Cancel to go back
+5. **Confirmation**: You'll see a message: "Print scheduled in X minutes"
+6. **Automatic start**: The print will start automatically after the specified delay
+
+**Example Workflow:**
+```
+1. Touch "my_model.gcode" in file browser
+2. Dialog: "Start print now or schedule for later?"
+3. Touch "SCHEDULE"
+4. Numeric input: Enter "30" (minutes)
+5. Touch "OK"
+6. Confirmation: "Print scheduled in 30 minutes"
+7. Print starts automatically in 30 minutes
+```
+
 ### G-Code Command: M3400
 
-The M3400 command provides full control over the delayed print scheduler.
+For advanced users and automation, the M3400 command provides full control over the delayed print scheduler.
 
 #### Schedule print with delay (in minutes)
 
@@ -203,7 +232,8 @@ M3400              ; Verify cancellation
 
 Planned improvements for this feature:
 
-- [ ] UI integration with touchscreen
+- [x] UI integration with touchscreen (✅ Completed)
+- [ ] Status indicator in screen header showing scheduled print info
 - [ ] Multiple scheduled prints queue
 - [ ] Email/notification when print starts
 - [ ] Integration with Prusa Connect for remote scheduling
